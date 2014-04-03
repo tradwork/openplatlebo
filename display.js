@@ -7,12 +7,6 @@
  * _each engineer has a duty to keep the code elegant
  */
 
-function Dispalu(){
-    this.init = function(){
-
-    }
-    return this;
-}
 function Display(jsonObj,strParentId,strContentId){
     
     this.jsonObj = jsonObj;
