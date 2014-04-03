@@ -1,0 +1,217 @@
+{extends file="album/uplalbum.html"}
+
+{block name="assign" append}
+{$step = 1}
+{$contentClass = "content-addalbum"}
+{/block}
+{block name="css"}
+	<link href="{$smarty.const.STATIC_DIR}/css/display.css" rel="stylesheet" type="text/css"/>
+	<link href="{$smarty.const.STATIC_DIR}/css/jcrop/jquery.Jcrop.css" rel="stylesheet" type="text/css"/>
+{/block}
+{block name="js" append}
+<script src="{$smarty.const.STATIC_DIR}/js/components/picUpload.js?0731" type="text/javascript"></script>
+<script src="{$smarty.const.STATIC_DIR}/js/common/display.js" type="text/javascript"></script>
+<script src="{$smarty.const.STATIC_DIR}/js/jquery/plugins/jquery.Jcrop.js" type="text/javascript"></script>
+<script src="{$smarty.const.STATIC_DIR}/js/jquery/plugins/jquery.color.js" type="text/javascript"></script>
+<script src="{$smarty.const.STATIC_DIR}/js/album/parse.js" type="text/javascript"></script>
+<script src="{$smarty.const.STATIC_DIR}/js/album/pic_crop.js" type="text/javascript"></script>
+<script src="{$smarty.const.STATIC_DIR}/js/album/album.js"type="text/javascript"></script>
+<script src="{$smarty.const.STATIC_DIR}/js/album/parse_data.js" type="text/javascript"></script>
+<script src="{$smarty.const.STATIC_DIR}/js/album/album_singer.js" type="text/javascript"></script>
+<script type="text/javascript">
+	{include file="album/convertData.html"}
+</script>
+{/block}
+{block name="upl-content"}
+<div class="left_rectangle">
+	<form id="form_album_tpl" class="form_song" style="display:none">
+		<h3 class="ai_album">节目名称</h3><a href="#" id="album_eidt_btn" style="float:right;color:#999;display:none">编辑</a>
+		<div class="album_focus">
+			<img src="/static/img/demo_3.png" width="315" height="148" alt="" title='' id="img_focus_info" />
+		</div>
+		<input type="hidden" value="" name="ai_globalid"/>
+		<input type="hidden" value="" name="ai_source_info"/>
+		<input type="hidden" value="" name="si_tag_rel"/>
+		<input type="hidden" value="" name="si_tag_rel1"/>
+	</form>
+	<form id="form_album" class="form_song" style=""></form>
+
+	<div class="tab_menu">
+		<div class="tab" id="tab1" onclick="setTab('tab',1,2)">
+			<h4>简介</h4>
+		</div>
+		<div style="color: #e2e2e2; line-height: 40px; float: left; ">|</div>
+		
+		<div class="tab on" id="tab2" onclick="setTab('tab',2,2)">
+			<h4>单期节目</h4>
+		</div>
+	</div>
+
+	<div id="cont_tab_1_tpl" style="display:none">
+			<p class='text_9' id="ai_info"></p>
+			<!-- <a href="#">编辑</a> -->
+			<!-- <textarea class='text_9'>节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字节目简介最多个字</textarea>
+			<a href="#">&nbsp;取消</a><a href="#">确定 | </a> -->
+	</div>
+	<div id="cont_tab_1" style="display:none"></div>
+
+	<div class="song_list" id="cont_tab_2">
+		<form id="form_song" class="form_song">
+			<ul>
+				<li>
+					<div class="add-song">
+						<span class="add_btn"></span><em>添加新节目</em>
+					</div>
+				</li>
+ 				<!--
+				<li class="page">[
+					<a href="#">首页</a>
+					<a href="#">上一页</a>
+				<!-- 	<a href="#">1</a> 
+					<a href="#">2</a> 
+					<a href="#">3 </a>
+					<a href="#">4</a> 
+					<a href="#">下一页</a>
+					<a href="#">最后一页</a>
+					]
+				</li>-->
+				<li id='songs_list_tpl' style="display:none">
+					<div class="song_info">
+						<span class="si_album_no"></span>
+						<span class="img_pic_info"><img src="" width="87" height="87" alt="" /></span>
+						<span class="si_title"></span>
+						<span class="operator">
+							<a href="#" title="">发布</a>|
+							<a href="#" class="edit-song" title="">编辑</a>|
+							<a href="#" title="">删除</a>
+						</span>
+					</div>
+				</li>
+				<!--<li id="songs_list"></li>
+				
+				<li class="page">[
+					<a href="#">首页</a>
+					<a href="#">上一页</a>
+					<a href="#">1</a> 
+					<a href="#">2</a> 
+					<a href="#">3 </a>
+					<a href="#">4</a>
+					<a href="#">下一页</a>
+					]
+				</li>-->	
+			</ul>
+		</form>
+	</div>
+</div>
+
+<div class="right_rectangle">
+	<form id="form_edit_album_tpl" style="display:none">
+		<p class="form-p">
+			<label class="album_edit_title">节目标题：<span class="999 err_tips">(最多输入20个字)</span></label>
+			<input type="text" value="" name="ai_album" class="ai_album" data-required="true" data-trigger="change" data-error-container="#name_err_tip" data-required-message="请输入节目名">
+			<b class="f00 err-tip" id="name_err_tip"></b> 
+			<!-- 默认载入歌手或者DJ的数据 -->
+			<input type="hidden" value="{$user.ou_contact_name}" name="quku_artist_works_ref" id="quku_artist"/>
+			<b class="f00 err-tip" id="title_err_tip_1"></b> 
+		</p>	
+		<p class="form-p">
+			<label class="album_edit_title">节目分类：<span class="999 err_tips">(有啥要说的)</span></label>
+			<span style="display:block">
+				<select name="si_tag_rel" class="ai_class_1" id="si_tag_rel" data-error-container="#si_tag_rel_err_tip" data-required="true" class="form-select ai-select parsley-validated">
+					<!-- {foreach from=$data.option.si_tag_rel item=item key=key}<option value="{$key}">{$item}</option>{/foreach} -->
+				</select>
+				<select name="si_tag_rel1"  class="ai_class_2" id="si_tag_rel1" data-error-container="#si_tag_rel1_err_tip" data-required="true" class="form-select ai-select parsley-validated">
+					<option value="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+				</select>
+			</span>
+			<b class="f00 err-tip" id="si_tag_rel_err_tip"></b> 
+		</p>
+		<p class="form-p">
+			<label class="album_edit_title">关键字：<span class="999 err_tips">(每个关键字不超过20个字，不超过5个，之间用逗号分隔)</span></label>
+			<input type="text" value="" name="ai_source_info" class="ai_source_info_input" data-required="true" data-trigger="change" data-error-container="#source_err_tip" data-required-message="请输入标签名">
+			<b class="f00 err-tip" id="source_err_tip"></b> 
+		</p>
+
+
+		<p class="form-p">
+			<label class="album_edit_title">上传节目图片：<span class="999 err_tips">(大图建议尺寸500X500像素)</span></label>
+			<span class="imageholder1">
+				<img src="" width="190" height="190" alt="/static/img/demo_4.png" id="img_pic_info" />
+				<a href="#" class="pic-file" id="btn_pic_info" data-upl-type="0">上传图片</a>
+				<span class="form-p-file" id="file_pic_info"></span>
+				<input type="hidden" name="quku_pic_info" value="" id="json_pic_info" />
+			</span>
+			<b class="f00 err-tip" id="pic_err_tip"></b>
+		</p>
+
+ 		<p class="form-p">
+			<label class="album_edit_title">上传节目焦点图：<span class="999 err_tips">(大图建议尺寸680X320像素)</span></label>
+			<span class="imageholder">
+				<img src="" width="315" height="148" alt="/static/img/demo_5.png" id="img_focus_info" />
+				<a href="#" class="pic-file" id="btn_focus_info" data-upl-type="1">上传图片</a>
+				<span class="form-p-file" id="file_focus_info"></span>
+				<input type="hidden" name="quku_pic_info" value="" id="json_focus_info" />
+			</span>
+			<b class="f00 err-tip" id="pic_err_tip"></b>
+		</p>
+
+		<p class="form-p">
+			<label class="album_edit_title">节目简介：<span class="999 err_tips">(随便输入点什么)</span></label>
+			<textarea name='ai_info' class="ai_info_input" data-required="true" data-trigger="change" data-error-container="#info_err_tip" data-required-message="请输入节目简介"></textarea> 
+			<b class="f00 err-tip" id="info_err_tip"></b> 
+		</p>
+
+		<p class="form-p-submit">
+				<input type="button" value="" id="ai_submit" />
+				<input type="button" value="保存不发布" id="ai_save" />
+				<input type="button" value="取消" id="cancle" />
+		</p>
+	</form>
+
+	<form id="form_edit_album" style="display:none"></form>
+
+	<form id="form_edit_song_tpl"  style='display:none'>
+		<p class="form-p">
+			<label class="album_edit_title">单期节目名称：<span class="999 err_tips">(最多输入20个字)</span></label>
+			<input type="type" value="" name="ai_title">
+			<!-- 默认载入歌手或者DJ的数据 -->
+			<input type="hidden" value="{foreach from=$data.quku_artist_works_ref item=item key=key name=quku_artist_works_ref}{$item["awr_artist_name"]}{if !$smarty.foreach.quku_artist_works_ref.last},{/if}{/foreach}" name="quku_artist_works_ref" id="quku_artist" id="ai_name"/>
+			<input type="hidden" {$disabled} value='{foreach from=$data.quku_artist_works_ref item=item key=key name=quku_artist_works_ref}&#123;"ab_globalid":"{$item["awr_itemid"]}","ab_name":"{$item["awr_artist_name"]}"&#125;{if !$smarty.foreach.quku_artist_works_ref.last}$@${/if}{/foreach}' id="ai_name" data-required="true" data-trigger="change" data-error-container="#name_err_tip" data-required-message="请输入歌手名"/>
+			<b class="f00 err-tip" id="title_err_tip_1"></b> 
+		</p>	
+		<p class="form-p">
+			<label class="album_edit_title">上传图片：<span class="999 err_tips">(大图建议尺寸500X500像素)</span></label>
+			<div class="img_box">
+				<span class="imageholder"><img src="/static/img/demo_4.png" width="148" height="148" alt="" /></span>
+				<input type="hidden" name="json_pic_info">
+				<!-- 这是一个图片上传的插件 -->
+			</div>
+		</p>
+		<p class="form-p">
+			<label class="album_edit_title">上传声音文件：<span class="999 err_tips">(文件为MP3格式，不超过200M)</span></label>
+			<div class="img_box">
+				<span class="imageholder"><img src="/static/img/demo_5.png" width="315" height="148" alt="" /></span>
+				<input type="hidden" name="json_pic_info">
+				<!-- 这是一个图片上传的插件 -->
+			</div>
+		</p>
+		<p class="form-p">
+			<label class="album_edit_title">单期节目简介：<span class="999 err_tips">(最多输入140个字)</span></label>
+			<textarea type="type" value="" name="ai_title"></textarea>
+			<!-- 默认载入歌手或者DJ的数据 -->
+			<input type="hidden" value="{foreach from=$data.quku_artist_works_ref item=item key=key name=quku_artist_works_ref}{$item["awr_artist_name"]}{if !$smarty.foreach.quku_artist_works_ref.last},{/if}{/foreach}" name="quku_artist_works_ref" id="quku_artist" id="ai_name"/>
+			<input type="hidden" {$disabled} value='{foreach from=$data.quku_artist_works_ref item=item key=key name=quku_artist_works_ref}&#123;"ab_globalid":"{$item["awr_itemid"]}","ab_name":"{$item["awr_artist_name"]}"&#125;{if !$smarty.foreach.quku_artist_works_ref.last}$@${/if}{/foreach}' id="ai_name" data-required="true" data-trigger="change" data-error-container="#name_err_tip" data-required-message="请输入歌手名"/>
+			<b class="f00 err-tip" id="title_err_tip_1"></b> 
+		</p>
+
+		<p class="form-p-submit">
+				<input type="button" value="确定" id="si_submit" />
+				<input type="button" value="保存不发布" id="si_submit" />
+				<input type="button" value="取消" id="cancle" />
+		</p>
+	</form>
+	<form id="form_edit_song"  style='display:none'></form>
+</div>
+<div class="clear:both"></div>
+{/block}
+
